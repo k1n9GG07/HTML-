@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книжный Магазин</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Видео герой с шапкой */
+        .video-hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Прозрачная шапка для видео-секции */
+        .header-transparent {
+            background: transparent !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+            position: absolute !important;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .header-transparent nav a {
+            color: white !important;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .header-transparent nav a:hover {
+            opacity: 0.8;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .header-transparent .auth-buttons a {
+            color: white !important;
+            text-decoration: none;
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid white;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .header-transparent .auth-buttons a:hover {
+            background: white;
+            color: #333 !important;
+        }
+
+        .hero-content {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #333;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Основной контент с красивым фоном на всю ширину */
+        main {
+            padding: 4rem 0;
+            position: relative;
+            background: 
+                linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e9ecef' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E"),
+                radial-gradient(circle at 10% 20%, rgba(120, 119, 198, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 119, 198, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 30% 40%, rgba(120, 219, 255, 0.03) 0%, transparent 50%);
+            background-blend-mode: normal, overlay, normal, normal;
+            background-attachment: fixed;
+        }
+
+        /* Декоративные элементы на всю ширину */
+        .books-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 30 L70 30 L70 170 L50 170 Z M55 35 L65 35 L65 165 L55 165 Z M80 40 L100 40 L100 160 L80 160 Z M85 45 L95 45 L95 155 L85 155 Z M110 35 L130 35 L130 165 L110 165 Z M115 40 L125 40 L125 160 L115 160 Z M140 45 L160 45 L160 155 L140 155 Z M145 50 L155 50 L155 150 L145 150 Z' fill='%232c3e50'/%3E%3C/svg%3E");
+            background-size: 400px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 500;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #2c3e50, transparent);
+        }
+
+        /* Фильтры */
+        .filters {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(224, 224, 224, 0.5);
+            box-shadow: 
+                0 8px 30px rgba(0,0,0,0.12),
+                0 4px 12px rgba(0,0,0,0.05);
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* КАРТОЧКИ КНИГ С ЭФФЕКТОМ ПЕРЕВОРАЧИВАНИЯ */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Контейнер для 3D эффекта */
+        .book-card {
+            height: 600px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .book-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .book-card:hover .book-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Передняя и задняя стороны */
+        .book-front, .book-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        /* Передняя сторона (обложка) */
+        .book-front {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Задняя сторона (описание) */
+        .book-back {
+            transform: rotateY(180deg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Изображение книги */
+        .book-image {
+            height: 380px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .book-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .book-front:hover .book-image::before {
+            opacity: 1;
+        }
+
+        .book-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .book-front:hover .book-image img {
+            transform: scale(1.1);
+        }
+
+        /* Информация на передней стороне */
+        .book-front-info {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+
+        .book-author {
+            color: #666;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .book-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Кнопка на передней стороне */
+        .add-to-cart-front {
+            width: 100%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+            margin-top: auto;
+        }
+
+        .add-to-cart-front:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.4);
+        }
+
+        .add-to-cart-front.in-cart {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        /* Контент на задней стороне */
+        .book-back-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .book-back-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .book-description {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .book-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            color: #777;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-stars {
+            color: #ffd700;
+        }
+
+        .rating-value {
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* Кнопка на задней стороне */
+        .add-to-cart-back {
+            width: 100%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .add-to-cart-back:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+        }
+
+        /* Индикатор переворота */
+        .flip-indicator {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(44, 62, 80, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .book-front:hover .flip-indicator {
+            opacity: 1;
+        }
+
+        /* Секция "О нас" */
+        .about-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(44, 62, 80, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(44, 62, 80, 0.03) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 2.5rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .feature p {
+            font-size: 0.95rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .about-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color:  #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Стили для изображения в секции "О нас" */
+        .about-image {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            height: 500px;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Футер на всю ширину */
+        footer {
+            background: #2c3e50;
+            padding: 4rem 0 2rem;
+            color: white;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        /* Утилиты */
+        .search-box {
+            display: flex;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-radius: 50px;
+            overflow: hidden;
+            background: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1.2rem 2rem;
+            border: none;
+            font-size: 1.1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        .search-box button {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            padding: 0 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .search-box button:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .form-button:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #7f8c8d;
+        }
+
+        .switch-form a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        /* Корзина */
+        .cart-modal .modal-content {
+            max-width: 800px;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            gap: 1.5rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #2c3e50;
+        }
+
+        .cart-item-author {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .quantity-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .item-quantity {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .remove-item:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .cart-summary {
+            border-top: 2px solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .cart-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .cart-actions button {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .continue-shopping {
+            background: #f8f9fa;
+            color: #2c3e50;
+            border: 1px solid #ddd;
+        }
+
+        .continue-shopping:hover {
+            background: #e9ecef;
+        }
+
+        .checkout-button {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+        }
+
+        .checkout-button:hover {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-cart p {
+            font-size: 1.2rem;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid #27ae60;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left-color: #27ae60;
+        }
+
+        .notification.error {
+            border-left-color: #e74c3c;
+        }
+
+        .notification i {
+            font-size: 1.5rem;
+        }
+
+        .notification.success i {
+            color: #27ae60;
+        }
+
+        .notification.error i {
+            color: #e74c3c;
+        }
+
+        /* Пользователь в шапке */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .user-dropdown a:hover {
+            background: #f8f9fa;
+        }
+
+        .user-dropdown a.logout {
+            color: #e74c3c;
+        }
+
+        /* Кнопка корзины в шапке */
+        .cart-btn {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 2rem;
+                padding: 0 15px;
+            }
+            
+            .book-card {
+                height: 550px;
+            }
+            
+            .book-image {
+                height: 320px;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-group {
+                max-width: 100%;
+            }
+
+            .cart-modal .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .cart-item-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .books-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 10px;
+            }
+            
+            .book-card {
+                height: 500px;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .auth-buttons {
+                display: flex;
+                gap: 0.5rem;
+            }
+            
+            .auth-buttons a {
+                margin-left: 0;
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .book-image {
+                height: 280px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .filters {
+                padding: 1.5rem;
+                margin: 0 10px 2rem 10px;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+            
+            .book-card {
+                height: 620px;
+            }
+        }
+
+        /* Адаптивность для секции "О нас" */
+        @media (max-width: 992px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .about-image {
+                height: 400px;
+                order: -1;
+            }
+            
+            .about-text h3 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .about-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-section {
+                padding: 4rem 0;
+            }
+            
+            .about-image {
+                height: 250px;
+            }
+            
+            .feature {
+                padding: 1rem;
+            }
+            
+            .feature-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Видео герой с шапкой -->
+    <section class="video-hero">
+        <video id="background-video" autoplay muted loop playsinline>
+            <source src="video/background-video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        
+        <div class="video-overlay"></div>
+        
+        <!-- Шапка внутри видео -->
+        <header class="header-transparent">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">Книжный Магазин</div>
+                    
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="nav-link">Главная</a></li>
+                            <li><a href="#" class="nav-link">Каталог</a></li>
+                            <li><a href="#" class="nav-link">О нас</a></li>
+                        </ul>
+                    </nav>
+                    
+                    <div class="header-actions">
+                        <!-- Пользователь или кнопки авторизации -->
+                        <div id="auth-buttons" class="auth-buttons">
+                            <a href="#" class="login-btn" id="login-button">Войти</a>
+                            <a href="#" class="cart-btn" id="cart-button">
+                                Корзина 
+                                <span class="cart-count" id="cart-count">0</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Меню пользователя (скрыто по умолчанию) -->
+                        <div id="user-menu" class="user-menu" style="display: none;">
+                            <div class="user-avatar" id="user-avatar">U</div>
+                            <div class="user-dropdown" id="user-dropdown">
+                                <a href="#" id="user-name"></a>
+                                <a href="#" id="my-orders">Мои заказы</a>
+                                <a href="#" class="logout" id="logout-button">Выйти</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Контент героя -->
+        <div class="hero-content">
+            <h1>Книги меняют мир</h1>
+            <p>Откройте для себя новые истории и знания в нашем curated каталоге</p>
+            <button class="cta-button" id="main-cta">Смотреть каталог</button>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <main>
+        <div class="books-background"></div>
+        
+        <div class="container">
+            <!-- Поиск -->
+            <div class="search-box">
+                <input type="text" placeholder="Поиск книг, авторов, жанров...">
+                <button>🔍</button>
+            </div>
+
+            <!-- Фильтры -->
+            <section class="filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Жанр</label>
+                        <select class="genre-filter">
+                            <option>Все жанры</option>
+                            <option>Фантастика</option>
+                            <option>Детективы</option>
+                            <option>Романы</option>
+                            <option>Бизнес</option>
+                            <option>Детские</option>
+                            <option>Наука</option>
+                            <option>История</option>
+                            <option>Психология</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Цена</label>
+                        <select class="price-filter">
+                            <option>Любая цена</option>
+                            <option>До 500 руб.</option>
+                            <option>500 - 1000 руб.</option>
+                            <option>1000 - 2000 руб.</option>
+                            <option>Выше 2000 руб.</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Сортировка</label>
+                        <select class="sort-filter">
+                            <option>По популярности</option>
+                            <option>По цене (сначала дешевые)</option>
+                            <option>По цене (сначала дорогие)</option>
+                            <option>По новизне</option>
+                            <option>По алфавиту (А-Я)</option>
+                            <option>По алфавиту (Я-А)</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <h2 class="section-title">Популярные книги</h2>
+        </div>
+
+        <!-- Сетка книг с эффектом переворачивания -->
+        <section class="books-grid" id="books-container">
+            <!-- Книги будут добавляться через JavaScript -->
+        </section>
+
+        <!-- Секция "О нас" -->
+        <section class="about-section" id="about-us">
+            <div class="container">
+                <h2 class="section-title">О нашем магазине</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <h3>Книжный Горизонт — ваш проводник в мир литературы</h3>
+                        <p>Мы — современный книжный магазин, который начал свою историю в 2024 году. Наша миссия — делать качественную литературу доступной каждому. В нашем магазине вы найдете книги на любой вкус — от классической литературы до современных бестселлеров.</p>
+                        
+                        <div class="about-features">
+                            <div class="feature">
+                                <div class="feature-icon"></div>
+                                <h4>Более 10,000 книг</h4>
+                                <p>От классики до современных бестселлеров</p>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"></div>
+                                <h4>Быстрая доставка</h4>
+                                <p>По всей России за 1-3 дня</p>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"></div>
+                                <h4>Экспертные подборки</h4>
+                                <p>Книжные рекомендации от наших специалистов</p>
+                            </div>
+                            <div class="feature">
+                                <div class="feature-icon"></div>
+                                <h4>Подарочные издания</h4>
+                                <p>Книги в коллекционных переплетах</p>
+                            </div>
+                        </div>
+                        
+                        <div class="about-stats">
+                            <div class="stat">
+                                <div class="stat-number">15,000+</div>
+                                <div class="stat-label">довольных клиентов</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">50+</div>
+                                <div class="stat-label">издательств-партнеров</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">24/7</div>
+                                <div class="stat-label">поддержка клиентов</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-image">
+                        <img src="images/about-us.jpg" 
+                             alt="Интерьер книжного магазина" 
+                             onerror="this.src='https://images.unsplash.com/photo-1589998059171-988d887df646?w=800&auto=format&fit=crop'">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>О магазине</h3>
+                <p>Современный книжный магазин с тщательно подобранной коллекцией литературы для самых взыскательных читателей.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Категории</h3>
+                <ul>
+                    <li><a href="#">Художественная литература</a></li>
+                    <li><a href="#">Детские книги</a></li>
+                    <li><a href="#">Бизнес и экономика</a></li>
+                    <li><a href="#">Наука и образование</a></li>
+                    <li><a href="#">Комиксы и манга</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Помощь</h3>
+                <ul>
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Возврат товара</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 Книжный Горизонт. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно регистрации/входа -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Вход</h2>
+                <button class="close-modal" id="close-auth-modal">&times;</button>
+            </div>
+            
+            <form id="login-form" style="display: block;">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="form-button">Войти</button>
+                <div class="switch-form">
+                    Нет аккаунта? <a href="#" id="switch-to-register">Зарегистрироваться</a>
+                </div>
+            </form>
+            
+            <form id="register-form" style="display: none;">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="register-confirm-password" required>
+                </div>
+                <button type="submit" class="form-button">Зарегистрироваться</button>
+                <div class="switch-form">
+                    Уже есть аккаунт? <a href="#" id="switch-to-login">Войти</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно корзины -->
+    <div class="modal cart-modal" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ваша корзина</h2>
+                <button class="close-modal" id="close-cart-modal">&times;</button>
+            </div>
+            
+            <div class="cart-items" id="cart-items">
+                <!-- Товары будут добавляться динамически -->
+            </div>
+            
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="cart-total">
+                    <span>Итого:</span>
+                    <span id="cart-total-price">0 руб.</span>
+                </div>
+                <div class="cart-actions">
+                    <button class="continue-shopping" id="continue-shopping">Продолжить покупки</button>
+                    <button class="checkout-button" id="checkout-button">Оформить заказ</button>
+                </div>
+            </div>
+            
+            <div class="empty-cart" id="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Ваша корзина пуста</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div id="notification-container"></div>
+
+    <script>
+        // Полные данные книг с описаниями
+        const books = [
+            {
+                id: 1,
+                title: "Мастер и Маргарита",
+                author: "Михаил Булгаков",
+                price: 650,
+                image: "images/book1.jpg",
+                genre: "Романы",
+                description: "Великий роман о добре и зле, любви и предательстве, действие которого разворачивается в Москве 1930-х годов и в древнем Иерусалиме.",
+                pages: 480,
+                year: 1967,
+                rating: 4.8
+            },
+            {
+                id: 2,
+                title: "1984",
+                author: "Джордж Оруэлл",
+                price: 580,
+                image: "images/book2.jpg",
+                genre: "Фантастика",
+                description: "Антиутопия о тоталитарном обществе, где правительство контролирует каждую мысль и действие граждан.",
+                pages: 328,
+                year: 1949,
+                rating: 4.7
+            },
+            {
+                id: 3,
+                title: "Преступление и наказание",
+                author: "Федор Достоевский",
+                price: 720,
+                image: "images/book3.jpg",
+                genre: "Романы",
+                description: "Психологический роман о студенте Родионе Раскольникове, совершившем убийство и пытающемся оправдать свой поступок.",
+                pages: 672,
+                year: 1866,
+                rating: 4.6
+            },
+            {
+                id: 4,
+                title: "Гарри Поттер и Философский камень",
+                author: "Дж. К. Роулинг",
+                price: 890,
+                image: "images/book4.jpg",
+                genre: "Фантастика",
+                description: "Первая книга знаменитой серии о юном волшебнике Гарри Поттере, который узнает о своем магическом наследии.",
+                pages: 320,
+                year: 1997,
+                rating: 4.9
+            },
+            {
+                id: 5,
+                title: "Маленький принц",
+                author: "Антуан де Сент-Экзюпери",
+                price: 450,
+                image: "images/book5.jpg",
+                genre: "Детские",
+                description: "Философская сказка-притча о мальчике с другой планеты, который учит нас видеть сердцем, а не глазами.",
+                pages: 96,
+                year: 1943,
+                rating: 4.8
+            },
+            {
+                id: 6,
+                title: "Война и мир",
+                author: "Лев Толстой",
+                price: 950,
+                image: "images/book6.jpg",
+                genre: "Романы",
+                description: "Эпическое произведение о жизни русского общества во время войны с Наполеоном, полное философских размышлений.",
+                pages: 1225,
+                year: 1869,
+                rating: 4.7
+            },
+            {
+                id: 7,
+                title: "Атлант расправил плечи",
+                author: "Айн Рэнд",
+                price: 1200,
+                image: "images/book7.jpg",
+                genre: "Бизнес",
+                description: "Роман-манифест объективизма о борьбе творческих личностей против коллективистского общества.",
+                pages: 1168,
+                year: 1957,
+                rating: 4.5
+            },
+            {
+                id: 8,
+                title: "Сто лет одиночества",
+                author: "Габриэль Гарсиа Маркес",
+                price: 780,
+                image: "images/book8.jpg",
+                genre: "Романы",
+                description: "Магический реализм в истории семьи Буэндиа на протяжении семи поколений в вымышленном городе Макондо.",
+                pages: 448,
+                year: 1967,
+                rating: 4.8
+            },
+            {
+                id: 9,
+                title: "Три товарища",
+                author: "Эрих Мария Ремарк",
+                price: 690,
+                image: "images/book9.jpg",
+                genre: "Романы",
+                description: "Роман о дружбе, любви и потерях в послевоенной Германии, написанный с пронзительной искренностью.",
+                pages: 384,
+                year: 1936,
+                rating: 4.7
+            },
+            {
+                id: 10,
+                title: "Краткая история времени",
+                author: "Стивен Хокинг",
+                price: 850,
+                image: "images/book10.jpg",
+                genre: "Наука",
+                description: "Популярное изложение современных представлений о происхождении и развитии Вселенной.",
+                pages: 256,
+                year: 1988,
+                rating: 4.6
+            },
+            {
+                id: 11,
+                title: "Психология влияния",
+                author: "Роберт Чалдини",
+                price: 920,
+                image: "images/book11.jpg",
+                genre: "Психология",
+                description: "Классическое исследование механизмов убеждения и манипуляции в межличностных отношениях.",
+                pages: 336,
+                year: 1984,
+                rating: 4.7
+            },
+            {
+                id: 12,
+                title: "Грозовой перевал",
+                author: "Эмили Бронте",
+                price: 540,
+                image: "images/book12.jpg",
+                genre: "Романы",
+                description: "Мрачная история страстной и разрушительной любви на фоне суровых йоркширских пейзажей.",
+                pages: 416,
+                year: 1847,
+                rating: 4.6
+            }
+        ];
+
+        // Book fallback images
+        const bookFallbackImages = [
+            "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1558901357-ca41e027e43a?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1554757380-2fb69b9d5e53?w=400&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop"
+        ];
+
+        // State
+        let currentBooks = [...books];
+        let cart = [];
+        let currentUser = null;
+
+        // Local Storage keys
+        const CART_STORAGE_KEY = 'bookstore_cart';
+        const USER_STORAGE_KEY = 'bookstore_user';
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage();
+            loadUserFromStorage();
+            renderBooks();
+            setupEventListeners();
+            updateCartUI();
+            updateAuthUI();
+        });
+
+        // Загрузка корзины из LocalStorage
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+        }
+
+        // Сохранение корзины в LocalStorage
+        function saveCartToStorage() {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        }
+
+        // Загрузка пользователя из LocalStorage
+        function loadUserFromStorage() {
+            const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+        }
+
+        // Сохранение пользователя в LocalStorage
+        function saveUserToStorage() {
+            if (currentUser) {
+                localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem(USER_STORAGE_KEY);
+            }
+        }
+
+        // Рендер книг с эффектом переворачивания
+        function renderBooks() {
+            const booksContainer = document.getElementById('books-container');
+            booksContainer.innerHTML = '';
+
+            currentBooks.forEach((book, index) => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                
+                const inCart = cart.find(item => item.id === book.id);
+                const buttonText = inCart ? 'В корзине' : 'В корзину';
+                const buttonClass = inCart ? 'add-to-cart-front in-cart' : 'add-to-cart-front';
+                
+                // Генерируем звездочки для рейтинга
+                const stars = generateStars(book.rating);
+                
+                bookCard.innerHTML = `
+                    <div class="book-card-inner">
+                        <!-- Передняя сторона -->
+                        <div class="book-front">
+                            <div class="book-image">
+                                <img src="${book.image}" 
+                                     alt="${book.title}" 
+                                     onerror="this.src='${bookFallbackImages[index]}'">
+                            </div>
+                            <div class="book-front-info">
+                                <div class="book-title">${book.title}</div>
+                                <div class="book-author">${book.author}</div>
+                                <div class="book-price">${book.price} руб.</div>
+                                <button class="${buttonClass}" data-id="${book.id}">
+                                    ${buttonText}
+                                </button>
+                            </div>
+                            <div class="flip-indicator">
+                                Наведите для описания
+                            </div>
+                        </div>
+                        
+                        <!-- Задняя сторона -->
+                        <div class="book-back">
+                            <div class="book-back-content">
+                                <div class="book-back-title">${book.title}</div>
+                                <div class="book-description">${book.description}</div>
+                                
+                                <div class="book-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Автор:</span>
+                                        <span class="detail-value">${book.author}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Жанр:</span>
+                                        <span class="detail-value">${book.genre}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Страниц:</span>
+                                        <span class="detail-value">${book.pages}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Год издания:</span>
+                                        <span class="detail-value">${book.year}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="book-rating">
+                                    <div class="rating-stars">${stars}</div>
+                                    <div class="rating-value">${book.rating}/5</div>
+                                </div>
+                            </div>
+                            
+                            <button class="add-to-cart-back" data-id="${book.id}">
+                                Добавить в корзину за ${book.price} руб.
+                            </button>
+                        </div>
+                    </div>
+                `;
+                booksContainer.appendChild(bookCard);
+            });
+
+            // Обновляем слушатели событий для кнопок корзины
+            document.querySelectorAll('.add-to-cart-front, .add-to-cart-back').forEach(button => {
+                button.addEventListener('click', addToCart);
+            });
+        }
+
+        // Генерация звездочек для рейтинга
+        function generateStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Добавление в корзину
+        function addToCart(e) {
+            const bookId = parseInt(e.target.dataset.id);
+            const book = books.find(b => b.id === bookId);
+            
+            if (!book) return;
+            
+            const existingItem = cart.find(item => item.id === bookId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...book,
+                    quantity: 1
+                });
+            }
+            
+            saveCartToStorage();
+            updateCartUI();
+            renderBooks();
+            
+            showNotification('Книга добавлена в корзину!', 'success');
+            
+            // Анимация кнопки
+            e.target.textContent = 'В корзине';
+            e.target.classList.add('in-cart');
+            e.target.disabled = true;
+            
+            setTimeout(() => {
+                e.target.disabled = false;
+            }, 1000);
+        }
+
+        // Обновление UI корзины
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Обновляем счетчик в шапке
+            document.getElementById('cart-count').textContent = totalItems;
+            
+            // Обновляем модальное окно корзины
+            renderCartItems();
+            updateCartSummary(totalPrice);
+            
+            // Показываем/скрываем элементы корзины
+            const hasItems = cart.length > 0;
+            document.getElementById('cart-summary').style.display = hasItems ? 'block' : 'none';
+            document.getElementById('empty-cart').style.display = hasItems ? 'none' : 'block';
+        }
+
+        // Рендер товаров в корзине
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" 
+                         alt="${item.title}" 
+                         class="cart-item-image"
+                         onerror="this.src='${bookFallbackImages[item.id - 1] || bookFallbackImages[0]}'">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-author">${item.author}</div>
+                        <div class="cart-item-price">${item.price} руб.</div>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn decrease" data-id="${item.id}">-</button>
+                            <span class="item-quantity">${item.quantity}</span>
+                            <button class="quantity-btn increase" data-id="${item.id}">+</button>
+                        </div>
+                        <button class="remove-item" data-id="${item.id}" title="Удалить">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Добавляем обработчики для кнопок в корзине
+            document.querySelectorAll('.decrease').forEach(btn => {
+                btn.addEventListener('click', decreaseQuantity);
+            });
+            
+            document.querySelectorAll('.increase').forEach(btn => {
+                btn.addEventListener('click', increaseQuantity);
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', removeFromCart);
+            });
+        }
+
+        // Обновление итоговой суммы
+        function updateCartSummary(totalPrice) {
+            document.getElementById('cart-total-price').textContent = `${totalPrice} руб.`;
+        }
+
+        // Увеличение количества товара
+        function increaseQuantity(e) {
+            const bookId = parseInt(e.target.dataset.id);
+            const item = cart.find(item => item.id === bookId);
+            
+            if (item) {
+                item.quantity += 1;
+                saveCartToStorage();
+                updateCartUI();
+                renderBooks();
+            }
+        }
+
+        // Уменьшение количества товара
+        function decreaseQuantity(e) {
+            const bookId = parseInt(e.target.dataset.id);
+            const item = cart.find(item => item.id === bookId);
+            
+            if (item && item.quantity > 1) {
+                item.quantity -= 1;
+                saveCartToStorage();
+                updateCartUI();
+                renderBooks();
+            } else if (item && item.quantity === 1) {
+                removeFromCart(e);
+            }
+        }
+
+        // Удаление из корзины
+        function removeFromCart(e) {
+            const bookId = parseInt(e.target.dataset.id);
+            cart = cart.filter(item => item.id !== bookId);
+            
+            saveCartToStorage();
+            updateCartUI();
+            renderBooks();
+            
+            showNotification('Книга удалена из корзины', 'error');
+        }
+
+        // Обновление UI авторизации
+        function updateAuthUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+                userName.textContent = currentUser.name;
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Показать уведомление
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.getElementById('notification-container').appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Модальные окна
+            const authModal = document.getElementById('auth-modal');
+            const cartModal = document.getElementById('cart-modal');
+            
+            // Кнопка входа
+            document.getElementById('login-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                showLoginForm();
+                authModal.classList.add('active');
+            });
+            
+            // Кнопка корзины
+            document.getElementById('cart-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                cartModal.classList.add('active');
+            });
+            
+            // Закрытие модальных окон
+            document.getElementById('close-auth-modal').addEventListener('click', () => {
+                authModal.classList.remove('active');
+            });
+            
+            document.getElementById('close-cart-modal').addEventListener('click', () => {
+                cartModal.classList.remove('active');
+            });
+            
+            document.getElementById('continue-shopping').addEventListener('click', () => {
+                cartModal.classList.remove('active');
+            });
+            
+            // Клик вне модального окна
+            window.addEventListener('click', (e) => {
+                if (e.target === authModal) {
+                    authModal.classList.remove('active');
+                }
+                if (e.target === cartModal) {
+                    cartModal.classList.remove('active');
+                }
+            });
+            
+            // Переключение форм регистрации/входа
+            document.getElementById('switch-to-register').addEventListener('click', (e) => {
+                e.preventDefault();
+                showRegisterForm();
+            });
+            
+            document.getElementById('switch-to-login').addEventListener('click', (e) => {
+                e.preventDefault();
+                showLoginForm();
+            });
+            
+            // Форма входа
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                login();
+            });
+            
+            // Форма регистрации
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                register();
+            });
+            
+            // Кнопка выхода
+            document.getElementById('logout-button').addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+            
+            // Аватар пользователя
+            document.getElementById('user-avatar').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = document.getElementById('user-dropdown');
+                dropdown.classList.toggle('active');
+            });
+            
+            // Закрытие dropdown при клике вне
+            document.addEventListener('click', () => {
+                const dropdown = document.getElementById('user-dropdown');
+                dropdown.classList.remove('active');
+            });
+            
+            // Кнопка оформления заказа
+            document.getElementById('checkout-button').addEventListener('click', () => {
+                checkout();
+            });
+            
+            // Остальные обработчики (поиск, фильтры и т.д.)
+            const searchInput = document.querySelector('.search-box input');
+            const searchButton = document.querySelector('.search-box button');
+            
+            searchInput.addEventListener('input', filterBooks);
+            searchButton.addEventListener('click', filterBooks);
+            
+            document.querySelector('.genre-filter').addEventListener('change', filterBooks);
+            document.querySelector('.price-filter').addEventListener('change', filterBooks);
+            document.querySelector('.sort-filter').addEventListener('change', sortBooks);
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', handleNavigation);
+            });
+            
+            document.getElementById('main-cta').addEventListener('click', () => {
+                document.querySelector('.books-grid').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        }
+
+        // Показать форму входа
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('modal-title').textContent = 'Вход';
+        }
+
+        // Показать форму регистрации
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('modal-title').textContent = 'Регистрация';
+        }
+
+        // Вход пользователя
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Простая валидация
+            if (!email || !password) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            // В реальном приложении здесь был бы запрос к серверу
+            // Для демо просто создаем пользователя
+            currentUser = {
+                id: Date.now(),
+                email: email,
+                name: email.split('@')[0],
+                joinDate: new Date().toISOString()
+            };
+            
+            saveUserToStorage();
+            updateAuthUI();
+            document.getElementById('auth-modal').classList.remove('active');
+            showNotification('Вы успешно вошли!', 'success');
+            
+            // Очищаем форму
+            document.getElementById('login-form').reset();
+        }
+
+        // Регистрация пользователя
+        function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // Валидация
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Пароль должен быть не менее 6 символов', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Пароли не совпадают', 'error');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showNotification('Введите корректный email', 'error');
+                return;
+            }
+            
+            // В реальном приложении здесь был бы запрос к серверу
+            currentUser = {
+                id: Date.now(),
+                email: email,
+                name: name,
+                joinDate: new Date().toISOString()
+            };
+            
+            saveUserToStorage();
+            updateAuthUI();
+            document.getElementById('auth-modal').classList.remove('active');
+            showNotification('Регистрация прошла успешно!', 'success');
+            
+            // Очищаем форму
+            document.getElementById('register-form').reset();
+        }
+
+        // Выход пользователя
+        function logout() {
+            currentUser = null;
+            saveUserToStorage();
+            updateAuthUI();
+            showNotification('Вы вышли из аккаунта', 'error');
+            
+            // Закрываем dropdown
+            document.getElementById('user-dropdown').classList.remove('active');
+        }
+
+        // Оформление заказа
+        function checkout() {
+            if (!currentUser) {
+                showNotification('Для оформления заказа войдите в аккаунт', 'error');
+                showLoginForm();
+                document.getElementById('auth-modal').classList.add('active');
+                document.getElementById('cart-modal').classList.remove('active');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Корзина пуста', 'error');
+                return;
+            }
+            
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const order = {
+                id: Date.now(),
+                userId: currentUser.id,
+                items: [...cart],
+                total: totalPrice,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            // В реальном приложении здесь был бы запрос к серверу
+            showNotification(`Заказ на ${totalPrice} руб. оформлен!`, 'success');
+            
+            // Очищаем корзину
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            renderBooks();
+            
+            // Закрываем корзину
+            document.getElementById('cart-modal').classList.remove('active');
+        }
+
+        // Функции фильтрации и поиска
+        function filterBooks() {
+            const searchTerm = document.querySelector('.search-box input').value.toLowerCase();
+            const genreFilter = document.querySelector('.genre-filter').value;
+            const priceFilter = document.querySelector('.price-filter').value;
+            
+            currentBooks = books.filter(book => {
+                const matchesSearch = book.title.toLowerCase().includes(searchTerm) || 
+                                    book.author.toLowerCase().includes(searchTerm);
+                const matchesGenre = genreFilter === 'Все жанры' || book.genre === genreFilter;
+                const matchesPrice = checkPriceFilter(book.price, priceFilter);
+                
+                return matchesSearch && matchesGenre && matchesPrice;
+            });
+            
+            renderBooks();
+        }
+
+        function checkPriceFilter(price, filter) {
+            switch(filter) {
+                case 'До 500 руб.': return price <= 500;
+                case '500 - 1000 руб.': return price >= 500 && price <= 1000;
+                case '1000 - 2000 руб.': return price >= 1000 && price <= 2000;
+                case 'Выше 2000 руб.': return price > 2000;
+                default: return true;
+            }
+        }
+
+        function sortBooks() {
+            const sortBy = document.querySelector('.sort-filter').value;
+            
+            currentBooks.sort((a, b) => {
+                switch(sortBy) {
+                    case 'По цене (сначала дешевые)':
+                        return a.price - b.price;
+                    case 'По цене (сначала дорогие)':
+                        return b.price - a.price;
+                    case 'По алфавиту (А-Я)':
+                        return a.title.localeCompare(b.title);
+                    case 'По алфавиту (Я-А)':
+                        return b.title.localeCompare(a.title);
+                    case 'По новизне':
+                        return 0;
+                    default:
+                        return 0;
+                }
+            });
+            
+            renderBooks();
+        }
+
+        function handleNavigation(e) {
+            e.preventDefault();
+            const section = e.target.textContent;
+            if (section === 'Главная') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (section === 'Каталог') {
+                document.querySelector('.books-grid').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else if (section === 'О нас') {
+                document.getElementById('about-us').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
